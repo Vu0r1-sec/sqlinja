@@ -2,7 +2,7 @@
 
 import string
 import requests
-from sqlHelper import SqliHelper, MySqlConfig
+from ..sqli_helper import SqliHelper, MySqlConfig
 
 # config
 # request execution

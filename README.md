@@ -15,8 +15,6 @@ This function include then target specific logic (encodage, token, method, ...)
 ##### Time Based Injection 
 
 ```python
-sleep_duration = 1
-
 def exec_request(request: str, sleep_duration:int) -> bool:
     url = "http://meta.local/mutillidae/index.php?page=login.php"
     datas = {

